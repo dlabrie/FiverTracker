@@ -23,6 +23,10 @@ export type WelcomeParamList = {
   WelcomeScreen: undefined;
 };
 
+export type OwingParamList = {
+  OwingScreen: undefined;
+};
+
 export type SettingsParamList = {
   SettingsScreen: undefined;
 };

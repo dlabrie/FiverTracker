@@ -1,9 +1,10 @@
 export default function isAuthenticated(jsonResponse: any) {
-    if(typeof jsonResponse["code"] == 'undefined') {
+    if(typeof jsonResponse === 'undefined')
         return true;
-    }
-    if(jsonResponse["code"] == "401" && jsonResponse["className"] == "not-authenticated") {
+    if(typeof jsonResponse.code === 'undefined') 
+        return true;
+    if(jsonResponse.code == "401" && jsonResponse.className == "not-authenticated")
         return false;
-    }
+    
     return true;
 }

@@ -22,7 +22,7 @@ export default function LoginScreen() {
 
   const [tempAuthToken, setTempAuthToken] = useState("");
 
-  const { state, dispatch } = useContext(authContext);
+  const { authState, authDispatch } = useContext(authContext);
 
   const processLoginForm = async (email: string, password: string) => {
     if(email == "") 
@@ -33,7 +33,7 @@ export default function LoginScreen() {
     setLoading(true);
     Keyboard.dismiss()
 
-    var response = await loginStepOne(state.uuid, email, password);
+    var response = await loginStepOne(authState.uuid, email, password);
     var resp = await response.json();
     if(response.status == 403) {
       alert(resp["message"]);
@@ -48,7 +48,7 @@ export default function LoginScreen() {
           setLoginStep1(false);
           setLoginStep2(true);
         } else {
-          dispatch({ type: 'setAuthToken', authToken: resp.accessToken });
+          authDispatch({ type: 'setAuthToken', authToken: resp.accessToken });
         }
       }
     }
@@ -61,7 +61,7 @@ export default function LoginScreen() {
 
     setLoading(true);
     Keyboard.dismiss()
-    var response = await loginStepTwo(state.uuid, tempAuthToken, mfa);
+    var response = await loginStepTwo(authState.uuid, tempAuthToken, mfa);
     if(response.status != 201) {
       alert("It appears something went wrong with your MFA request.");
       setLoginStep1(true);
@@ -72,7 +72,7 @@ export default function LoginScreen() {
       if(!resp.accessToken) {
         alert("An error occured while submitting your MFA request to Shakepay")
       } else {
-        dispatch({ type: 'setAuthToken', authToken: resp.accessToken });
+        authDispatch({ type: 'setAuthToken', authToken: resp.accessToken });
         setLoginStep2(false);
         setTempAuthToken("");
       }

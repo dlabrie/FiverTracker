@@ -1,12 +1,12 @@
 import uuid from "react-native-uuid";
-import * as SecureStore from 'expo-secure-store';
+import * as SQLite from 'expo-sqlite';
 
-const setToken = async (authToken) => {
-  await SecureStore.setItemAsync('authToken', authToken);
+const setToken = async (transactionToken) => {
+  await SecureStore.setItemAsync('transactionToken', transactionToken);
 };
 
 const deleteToken = async () => {
-  await SecureStore.deleteItemAsync('authToken');
+  await SecureStore.deleteItemAsync('transactionToken');
 };
 
 const setUUID = async (uuid) => {
@@ -17,20 +17,20 @@ const deleteUUID = async () => {
   await SecureStore.deleteItemAsync('UUID');
 };
 
-const authReducer = (authState, action) => {
-  switch (action.type) {
-    case 'setAuthToken':
-      setToken(action.authToken);
+const transactionReducer = (authState, action) => {
+  switch (action.) {
+    case 'settransactionToken':
+      setToken(action.transactionToken);
       return {
         ...authState,
-        authToken: action.authToken,
+        transactionToken: action.transactionToken,
       };
-    case 'unsetAuthToken':
+    case 'unsettransactionToken':
       deleteToken();
       
       return {
         ...authState,
-        authToken: false,
+        transactionToken: false,
       };
 
     case 'generateUUID':
@@ -58,4 +58,4 @@ const authReducer = (authState, action) => {
   }
 };
 
-export default authReducer;
+export default transactionReducer;

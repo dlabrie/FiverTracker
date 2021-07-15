@@ -14,12 +14,12 @@ export const authContext = createContext(initialState);
 // OUR STORE CONTAINS TWO VALUES
 // STATE, WHICH HOLDS ALL SAVED DATA, AND
 // DISPATCH, WHICH OFFERS A METHOD TO UPDATE OUR STATE
-export const Store = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, initialState);
+export const AuthStore = ({ children }) => {
+  const [authState, authDispatch] = useReducer(authReducer, initialState);
 
   return (
-    <authContext.Provider value={{ state, dispatch }}>{children}</authContext.Provider>
+    <authContext.Provider value={{ authState, authDispatch }}>{children}</authContext.Provider>
   );
 };
 
-export default { authContext, Store };
+export default { authContext, AuthStore };

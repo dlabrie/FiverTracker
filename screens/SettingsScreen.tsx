@@ -9,16 +9,16 @@ import * as SecureStore from 'expo-secure-store';
 
 export default function App() {
       
-  const { state, dispatch } = useContext(authContext);
+  const { authState, authDispatch } = useContext(authContext);
 
   const Logout = async () => {
-    dispatch({ type: 'unsetAuthToken'});
+    authDispatch({ type: 'unsetAuthToken'});
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.containerSettings}>
-        <Text>state: {JSON.stringify(state)}</Text>
+        <Text>authState: {JSON.stringify(authState)}</Text>
         <TouchableOpacity style={styles.btn} onPress={Logout}>
             <Text>LOGOUT</Text>
         </TouchableOpacity>

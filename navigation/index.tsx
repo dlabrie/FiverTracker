@@ -8,16 +8,16 @@ import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
 import RootStackScreen from './RootStackScreen';
-import { Store } from '../reducers/authContext';
+import { AuthStore } from '../reducers/authContext';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
-    <Store>
+    <AuthStore>
       <NavigationContainer
         theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <RootStackScreen />
       </NavigationContainer>
-    </Store>
+    </AuthStore>
   );
 }
 

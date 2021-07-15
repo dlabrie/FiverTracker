@@ -14,6 +14,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import { BottomTabParamList, WelcomeParamList, SettingsParamList } from '../types';
 
 import WelcomeScreen from '../screens/WelcomeScreen';
+import OwingScreen from '../screens/OwingScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -28,6 +29,14 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name="Welcome"
         component={WelcomeNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Owing"
+        component={OwingNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
@@ -64,6 +73,20 @@ function WelcomeNavigator() {
         options={{ headerTitle: 'Welcome' }}
       />
     </WelcomeStack.Navigator>
+  );
+}
+
+const OwingStack = createStackNavigator<OwingParamList>();
+
+function OwingNavigator() {
+  return (
+    <OwingStack.Navigator>
+      <OwingStack.Screen
+        name="OwingScreen"
+        component={OwingScreen}
+        options={{ headerTitle: 'People you owe' }}
+      />
+    </OwingStack.Navigator>
   );
 }
 

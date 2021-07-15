@@ -18,12 +18,12 @@ import * as SecureStore from 'expo-secure-store';
 const RootNavigationStack = createStackNavigator();
 
 export default function RootStackScreen() {
-  const { state, dispatch } = useContext(authContext);
+  const { authState, authDispatch } = useContext(authContext);
 
   const getAuthToken = async () => {
     const authToken = await SecureStore.getItemAsync('authToken');
     if (authToken) {
-      dispatch({ type: 'setAuthToken', authToken: authToken });
+      authDispatch({ type: 'setAuthToken', authToken: authToken });
     }
     return authToken;
   };
@@ -31,9 +31,9 @@ export default function RootStackScreen() {
   const getUUID = async () => {
     const UUID = await SecureStore.getItemAsync('UUID');
     if (!UUID) {
-      dispatch({ type: 'generateUUID' });
+      authDispatch({ type: 'generateUUID' });
     } else {
-      dispatch({ type: 'setUUID', UUID: UUID});
+      authDispatch({ type: 'setUUID', UUID: UUID});
     }
     return UUID;
   };
@@ -46,10 +46,10 @@ export default function RootStackScreen() {
     getUUID();
   }, []);
 
-  // We only want to start drawing the app when the state has been updated.
+  // We only want to start drawing the app when the authState has been updated.
   return (
-    <authContext.Provider value={{state, dispatch}}>
-      {state && state.uuid && <AuthenticationStackScreen />}
+    <authContext.Provider value={{authState, authDispatch}}>
+      {authState && authState.uuid && <AuthenticationStackScreen />}
     </authContext.Provider>
 
   );

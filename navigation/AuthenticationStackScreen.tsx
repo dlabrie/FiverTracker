@@ -17,11 +17,11 @@ import * as LocalAuthentication from 'expo-local-authentication';
 const AuthenticationNavigationStack = createStackNavigator();
 
 export default function AuthenticationStackScreen() {
-  const { state, dispatch } = useContext(authContext);
+  const { authState, authDispatch } = useContext(authContext);
 
   const [authenticated, setAuthenticated] = useState(false);
   const checkAuth = () => {
-    if(!state.authToken) {
+    if(!authState.authToken) {
       if(authenticated)
         setAuthenticated(false);
       return false;
@@ -75,7 +75,7 @@ export default function AuthenticationStackScreen() {
   }, []);
 
   return (
-    <authContext.Provider value={{state, dispatch}}>
+    <authContext.Provider value={{authState, authDispatch}}>
         <AuthenticationNavigationStack.Navigator
             screenOptions={{
             headerTransparent: true,
@@ -83,7 +83,7 @@ export default function AuthenticationStackScreen() {
             headerTitle: () => null,
             }}
         >
-          {!authenticated && !state.authToken ? (
+          {!authenticated && !authState.authToken ? (
             <AuthenticationNavigationStack.Screen name="Login" component={LoginScreen} />
             ) : (
             <AuthenticationNavigationStack.Screen name="Root" component={BottomTabNavigator} />
