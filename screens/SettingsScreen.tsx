@@ -4,24 +4,36 @@ import { Alert, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, View } from '../components/Themed';
 
 import { authContext } from '../reducers/authContext';
+import { transactionContext } from '../reducers/transactionContext';
 
 import * as SecureStore from 'expo-secure-store';
 
 export default function App() {
       
   const { authState, authDispatch } = useContext(authContext);
+  const { transactionState, transactionDispatch } = useContext(transactionContext);
 
   const Logout = async () => {
+    transactionDispatch({ type: 'resetTransactions'});
     authDispatch({ type: 'unsetAuthToken'});
+  };
+  const resetTransactions = async () => {
+    transactionDispatch({ type: 'resetTransactions'});
+    alert("The transaction cache has been emptied.");
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.containerSettings}>
-        <Text>authState: {JSON.stringify(authState)}</Text>
-        <TouchableOpacity style={styles.btn} onPress={Logout}>
-            <Text>LOGOUT</Text>
+        <Text>{JSON.stringify(authState)}</Text>
+        <TouchableOpacity style={styles.btn} onPress={resetTransactions}>
+            <Text lightColor="#fff">Empty Transaction Cache</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.btn} onPress={Logout}>
+            <Text lightColor="#fff">LOGOUT</Text>
+        </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -37,7 +49,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   containerSettings: {
-    width: "90%",
+    width: "95%",
   },
   text: {
     textAlign: 'center',
@@ -50,6 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
     marginTop: 5,
-    backgroundColor: "#009FFF"
+    backgroundColor: "#009FFF",
+    marginTop: 20,
   },
 });

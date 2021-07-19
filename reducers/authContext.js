@@ -6,7 +6,6 @@ import authReducer from './authReducer';
 const initialState = {
   authToken: false,
   uuid: false,
-  garbage: false,
 };
 
 export const authContext = createContext(initialState);

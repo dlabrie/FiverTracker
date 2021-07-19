@@ -9,14 +9,17 @@ import { ColorSchemeName } from 'react-native';
 
 import RootStackScreen from './RootStackScreen';
 import { AuthStore } from '../reducers/authContext';
+import { TransactionStore } from '../reducers/transactionContext';
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
     <AuthStore>
-      <NavigationContainer
-        theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <RootStackScreen />
-      </NavigationContainer>
+      <TransactionStore>
+        <NavigationContainer
+          theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <RootStackScreen />
+        </NavigationContainer>
+      </TransactionStore>
     </AuthStore>
   );
 }

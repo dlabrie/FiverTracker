@@ -1,18 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, Image, Button } from 'react-native';
+import { StyleSheet, Image, Button, TouchableOpacity,ScrollView } from 'react-native';
 
 import { authContext } from '../reducers/authContext';
+import { transactionContext } from '../reducers/transactionContext';
 
 import { Text, View } from '../components/Themed';
 
 import isAuthenticated from '../components/isAuthenticated'
 
+
 import shaketag from '../components/shakepay/shaketag'
 import waitlist from '../components/shakepay/waitlist'
+import wallet from '../components/shakepay/wallet'
+
+import * as transactionDatabaseHandler from '../components/transactionDatabaseHandler'
+
 
 export default function WelcomeScreen() {
 
   const { authState, authDispatch } = useContext(authContext);
+  const { transactionState, transactionDispatch } = useContext(transactionContext);
 
   const [myShaketag, setMyShaketag] = useState("");
 
@@ -26,6 +33,8 @@ export default function WelcomeScreen() {
   
   const [uniqueSwappersPaddle, setUniqueSwappersPaddle] = useState("");
   const [uniqueSwappers, setUniqueSwappers] = useState("");
+
+  const [wallets, setWallets] = useState([]);
 
   const pullShaketag = async () => {
     var s = await shaketag(authState.uuid, authState.authToken);
@@ -72,9 +81,9 @@ export default function WelcomeScreen() {
     for (let i in w.history) {
         if(w.history[i].name == "sentP2P") { 
             counter++;
-            if(parseInt(Date.parse(w.history[i].createdAt)) > startTime.getTime())
+            if(Date.parse(w.history[i].createdAt) > startTime.getTime())
                 counterToday++;
-            if(parseInt(Date.parse(w.history[i].createdAt)) > 1620014400000) 
+            if(Date.parse(w.history[i].createdAt) > 1620014400000) 
               uniqueSwappersPaddleTable[w.history[i].metadata.recipientId] = 1
             uniqueSwappersTable[w.history[i].metadata.recipientId] = 1
         }
@@ -91,17 +100,35 @@ export default function WelcomeScreen() {
     if(uniqueSwappers != uniqueSwappersCount)
       setUniqueSwappers(uniqueSwappersCount);
   }
+
+  const refreshTransactions =  () => {
+    transactionDispatch({type: 'update', uuid: authState.uuid, authToken: authState.authToken, transactionDispatch: transactionDispatch});
+  };
+
+  const pullWallets = async () => {
+    var walletResponse = await wallet(authState.uuid, authState.authToken);
+    var w = await walletResponse.json();
+    if(walletResponse.status == 401) {
+      if(!isAuthenticated(w)) {
+          authDispatch({ type: 'unsetAuthToken' });
+          return false;
+      } 
+    }
+    setWallets(w.data);
+  }
   
   useEffect(() => {
     pullWaitlist();
     pullShaketag();
+    refreshTransactions();
+    pullWallets();
   }, []);
 
   
   return (
     <View style={styles.container}>
+      <ScrollView style={styles.container90}>
         <View style={styles.shaketagContainer}>
-          <Button onPress={pullWaitlist} title="Refresh Waitlist Info" />
           <Text style={styles.title}>Hi {myShaketag} 
               { badges.map(badge => {
                   return (<Image key={badge.name} source={{ uri: `data:image/png;base64,${badge.icon}`}} resizeMode="contain" style={styles.paddle} />);
@@ -140,14 +167,36 @@ export default function WelcomeScreen() {
           </View>
         </View>
 
-        <Text style={{marginTop: 20}}>Message me on discord if there are any features you would like to have.</Text>
-
-        <View style={styles.loading}>
-              <Text></Text>
+        <View style={styles.waitlistRefresh}>
+          <TouchableOpacity style={styles.btn} onPress={pullWaitlist}>
+              <Text lightColor="#fff">Refresh Waitlist Info</Text>
+          </TouchableOpacity>
         </View>
-        
-        <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-    </View>
+        <View style={styles.transactionRefresh}>
+          <TouchableOpacity style={styles.btn} onPress={refreshTransactions}>
+              <Text lightColor="#fff">Refresh Transactions</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.walletsView}>
+          { wallets && wallets.map(wallet => {
+              return (
+                <View style={styles.walletView}>
+                  <View style={styles.currencyView}>
+                    <Text style={styles.currency} lightColor="#FFF">{wallet.currency}</Text>
+                  </View>
+                  <View style={styles.balanceView}>
+                    <Text style={styles.balance} lightColor="#FFF">{wallet.currency=="CAD" && wallet.balance.toFixed(2)}{wallet.currency!="CAD" && wallet.balance.toFixed(6)}</Text>
+                    {wallet.fiatBalance>0 && <Text style={styles.fiatBalance} darkColor="#aaa" lightColor="#eee">${(Math.round(wallet.fiatBalance*100)/100).toFixed(2)}</Text>}
+                  </View>
+                </View>
+              );
+            })
+          } 
+        </View>
+
+    </ScrollView>
+  </View>
 
   );
 }
@@ -156,18 +205,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    padding: 10,
     flexBasis: 10,
     alignItems: 'center',
-    justifyContent: 'center',
+  },
+  container90: {
+    flex: 1,
+    width: "95%",
+    padding: 10,
+    flexBasis: 10,
   },
   shaketagContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     width: "100%",
+    marginBottom: 20,
+    marginTop: 50,
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
@@ -207,4 +262,97 @@ const styles = StyleSheet.create({
     backgroundColor: "#009FFF1A",
     borderRadius:5,
   },
+
+  waitlistRefresh: {
+    marginTop:20,
+    width: "100%",
+  },
+  transactionRefresh: {
+    marginTop:10,
+    marginBottom: 20,
+    width: "100%",
+  },
+  btn: {
+    width: "100%",
+    borderRadius: 3,
+    padding: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    marginTop: 5,
+    backgroundColor: "#009FFF"
+  },
+  loadingView: {
+      width: "100%",
+      textAlign: "center",
+  },
+
+  walletsView: {
+    width:"100%",
+
+  },
+  walletView: {
+    flexDirection: "row",
+    marginVertical: 5,
+  },
+  currencyView: {
+    flex: 30,
+    padding: 10,
+    justifyContent: "center",
+    alignContent: "center",
+    borderTopStartRadius: 5,
+    borderBottomStartRadius: 5,
+    backgroundColor: "#ff000099",
+  },
+  currency: {
+    textAlign: "center",
+    fontSize:25,
+  },
+  balanceView: {
+    flex: 70,  
+    padding: 10,  
+    backgroundColor: "#ff000077",
+    borderTopEndRadius: 5,
+    borderBottomEndRadius: 5,
+  },
+  balance: {
+    textAlign: "right",
+    fontSize: 20,
+  },
+  fiatBalance: {
+    textAlign: "right",
+  },
+
+  loadingIconContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  loadingIconShade: {
+      alignItems: 'center',
+      justifyContent: 'center',   
+      padding: 30,
+      backgroundColor: "rgba(255,255,255,0.1)",
+      borderRadius: 100,
+  },
+  textShade: {
+      alignItems: 'center',
+      justifyContent: 'center',   
+      padding: 20,
+      backgroundColor: "rgba(0,0,0,0.7)",
+      borderRadius: 5,
+      marginTop:20,
+      borderStyle: "solid",
+      borderColor: "#fff",
+      borderWidth: 1,
+  },
+  loadingIcon: {
+      alignItems: 'center',
+      justifyContent: 'center'
+  }
 });

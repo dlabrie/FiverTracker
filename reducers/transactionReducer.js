@@ -1,60 +1,60 @@
 import uuid from "react-native-uuid";
 import * as SQLite from 'expo-sqlite';
+const db = SQLite.openDatabase('transactions.db') // returns Database object
+
+import * as transactionDatabaseHandler from '../components/transactionDatabaseHandler'
 
 const setToken = async (transactionToken) => {
   await SecureStore.setItemAsync('transactionToken', transactionToken);
 };
 
-const deleteToken = async () => {
-  await SecureStore.deleteItemAsync('transactionToken');
-};
-
-const setUUID = async (uuid) => {
-  await SecureStore.setItemAsync('UUID', uuid);
-};
-
-const deleteUUID = async () => {
-  await SecureStore.deleteItemAsync('UUID');
-};
-
-const transactionReducer = (authState, action) => {
-  switch (action.) {
-    case 'settransactionToken':
-      setToken(action.transactionToken);
-      return {
-        ...authState,
-        transactionToken: action.transactionToken,
-      };
-    case 'unsettransactionToken':
-      deleteToken();
+const transactionReducer = (transactionState, action) => {
+  switch (action.type) {
+    case 'init':
+        // Check if the items table exists if not create it
+        transactionDatabaseHandler.init()
       
+        return {
+          ...transactionState,
+          init: true,
+        };
+    case 'update':
+      transactionDatabaseHandler.updateTransactions(action.uuid, action.authToken, action.transactionDispatch);
       return {
-        ...authState,
-        transactionToken: false,
+        ...transactionState,
       };
-
-    case 'generateUUID':
-      var newUUID = uuid.v4();
-      setUUID(newUUID);
+    case 'loadingStatus':      
       return {
-        ...authState,
-        uuid: newUUID,
+        ...transactionState,
+        loadingMode: action.loadingMode,
+        loadingDate: action.loadingDate,
+        loadingComplete: action.loadingComplete,
+        loadingState: action.loadingState,
+      }; 
+    case 'storePeers':
+      return {
+        ...transactionState,
+        peers: action.peers,
+        peersInverse: action.peersInverse,
       };
-    case 'setUUID': 
-      setUUID(action.UUID)     
+    case 'dues': 
       return {
-        ...authState,
-        uuid: action.UUID,
+        ...transactionState,
+        owing: action.owing,
+        owes: action.owes,
       };
-    case 'deleteUUID':
-      deleteUUID();
-      
+    case 'resetTransactions':
+      transactionDatabaseHandler.resetTransactions();
       return {
-        ...authState,
-        uuid: false,
+        ...transactionState,
+      };
+    case 'userTransactions':
+      return {
+        ...transactionState,
+        history: action.history,
       };
     default:
-      return authState;
+      return transactionState;
   }
 };
 

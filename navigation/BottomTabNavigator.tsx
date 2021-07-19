@@ -15,6 +15,8 @@ import { BottomTabParamList, WelcomeParamList, SettingsParamList } from '../type
 
 import WelcomeScreen from '../screens/WelcomeScreen';
 import OwingScreen from '../screens/OwingScreen';
+import OwesScreen from '../screens/OwesScreen';
+import HistoryScreen from '../screens/HistoryScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -30,7 +32,7 @@ export default function BottomTabNavigator() {
         name="Welcome"
         component={WelcomeNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
 
@@ -38,7 +40,23 @@ export default function BottomTabNavigator() {
         name="Owing"
         component={OwingNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="arrow-up-circle" color={color} />,
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Owes"
+        component={OwesNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="arrow-down-circle" color={color} />,
+        }}
+      />
+
+      <BottomTab.Screen
+        name="History"
+        component={HistoryNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
 
@@ -46,7 +64,7 @@ export default function BottomTabNavigator() {
         name="Settings"
         component={SettingsNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="settings" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -84,9 +102,34 @@ function OwingNavigator() {
       <OwingStack.Screen
         name="OwingScreen"
         component={OwingScreen}
-        options={{ headerTitle: 'People you owe' }}
       />
     </OwingStack.Navigator>
+  );
+}
+
+const OwesStack = createStackNavigator<OwesParamList>();
+
+function OwesNavigator() {
+  return (
+    <OwesStack.Navigator>
+      <OwesStack.Screen
+        name="OwesScreen"
+        component={OwesScreen}
+      />
+    </OwesStack.Navigator>
+  );
+}
+
+const HistoryStack = createStackNavigator<HistoryParamList>();
+
+function HistoryNavigator() {
+  return (
+    <HistoryStack.Navigator>
+      <HistoryStack.Screen
+        name="HistoryScreen"
+        component={HistoryScreen}
+      />
+    </HistoryStack.Navigator>
   );
 }
 
@@ -98,7 +141,6 @@ function SettingsNavigator() {
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
-        options={{ headerTitle: 'Settings' }}
       />
     </SettingsStack.Navigator>
   );

@@ -7,6 +7,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import LoginScreen from '../screens/LoginScreen';
 
 import { authContext } from '../reducers/authContext';
+import { transactionContext } from '../reducers/transactionContext';
 
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuthentication from 'expo-local-authentication';
@@ -18,9 +19,17 @@ const AuthenticationNavigationStack = createStackNavigator();
 
 export default function AuthenticationStackScreen() {
   const { authState, authDispatch } = useContext(authContext);
+  const { transactionState, transactionDispatch } = useContext(transactionContext);
 
   const [authenticated, setAuthenticated] = useState(false);
   const checkAuth = () => {
+    if(!checkAuthToken())
+      return false;
+
+    return checkFaceId();
+  }
+
+  const checkAuthToken = () => {
     if(!authState.authToken) {
       if(authenticated)
         setAuthenticated(false);
@@ -29,9 +38,10 @@ export default function AuthenticationStackScreen() {
 
     if(!authenticated)
       setAuthenticated(true);
-
-    return checkFaceId();
+    
+    return true;
   }
+
 
   const checkFaceId = async () => {
     return true;
@@ -76,6 +86,7 @@ export default function AuthenticationStackScreen() {
 
   return (
     <authContext.Provider value={{authState, authDispatch}}>
+      <transactionContext.Provider value={{ transactionState, transactionDispatch }}>
         <AuthenticationNavigationStack.Navigator
             screenOptions={{
             headerTransparent: true,
@@ -89,6 +100,7 @@ export default function AuthenticationStackScreen() {
             <AuthenticationNavigationStack.Screen name="Root" component={BottomTabNavigator} />
           )}
         </AuthenticationNavigationStack.Navigator>
+      </transactionContext.Provider>
     </authContext.Provider>
 
   );

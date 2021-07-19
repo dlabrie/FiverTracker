@@ -8,7 +8,7 @@ import { Text, View } from '../components/Themed';
 
 import Dues from '../components/Dues'
 
-export default function OwingScreen() {
+export default function OwesScreen() {
 
   const { authState, authDispatch } = useContext(authContext);
   const { transactionState, transactionDispatch } = useContext(transactionContext);
@@ -26,16 +26,17 @@ export default function OwingScreen() {
       note={item.lastTransaction.note} 
       uuid={authState.uuid} 
       authToken={authState.authToken}
-      transactionDispatch={transactionDispatch} />);
+      transactionDispatch={transactionDispatch} 
+      />);
   }
   
   return (
     <View style={styles.container}>
         <View style={styles.shaketagContainer}>
-          <Text style={styles.title}>You owe them</Text>
+          <Text style={styles.title}>They owe you</Text>
         </View>
         <FlatList
-           data={transactionState.owing}
+           data={transactionState.owes}
            renderItem={renderItem}
            style={{ width: "100%" }}
            keyExtractor={(item) => item.lastTransaction.transactionId}

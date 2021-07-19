@@ -109,7 +109,7 @@ export default function LoginScreen() {
                     onChangeText={(password) => setPassword(password)}
                     />
                 <TouchableOpacity style={styles.btn} onPress={() => {processLoginForm(email, password)}}>
-                    <Text>LOGIN</Text>
+                    <Text lightColor="#fff">LOGIN</Text>
                 </TouchableOpacity>
             </View>
           }
@@ -126,7 +126,7 @@ export default function LoginScreen() {
                     onChangeText={(mfa) => setMFA(mfa)}
                     />
                 <TouchableOpacity style={styles.btn} onPress={() => {processMFAForm(mfa)}}>
-                    <Text>Submit MFA Code</Text>
+                    <Text lightColor="#fff">Submit MFA Code</Text>
                 </TouchableOpacity>
             </View>
           }

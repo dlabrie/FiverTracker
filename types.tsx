@@ -7,12 +7,15 @@ export type RootStackParamList = {
   Login: undefined;
   Root: undefined;
   NotFound: undefined;
-  Welcome: undefined;
 };
 
 export type BottomTabParamList = {
   Login: undefined;
   Settings: undefined;
+  Welcome: undefined;
+  Owing: undefined;
+  Owes: undefined;
+  History: undefined;
 };
 
 export type LoginParamList = {
@@ -25,6 +28,14 @@ export type WelcomeParamList = {
 
 export type OwingParamList = {
   OwingScreen: undefined;
+};
+
+export type OwesParamList = {
+  OwesScreen: undefined;
+};
+
+export type HistoryParamList = {
+  HistoryScreen: undefined;
 };
 
 export type SettingsParamList = {
