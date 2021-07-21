@@ -34,13 +34,12 @@ class Dues extends Component {
                {text: "Heck YES", onPress: () => {
                          this.setState({ disabledButton : true});
                          fundHandler.sendFunds(this.state.uuid, this.state.authToken, this.state.user, Math.abs(this.state.amount));
+                         this.state.transactionDispatch({type: 'update', uuid: this.state.uuid, authToken: this.state.authToken, transactionDispatch: this.state.transactionDispatch});
                     } 
                },
                {text: "No, I like making people wait", style: 'cancel'}
           ]
      );
-     this.state.transactionDispatch({type: 'update', uuid: this.state.uuid, authToken: this.state.authToken, transactionDispatch: this.state.transactionDispatch});
-
   }
     
   render() {

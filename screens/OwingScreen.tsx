@@ -26,7 +26,8 @@ export default function OwingScreen() {
       note={item.lastTransaction.note} 
       uuid={authState.uuid} 
       authToken={authState.authToken}
-      transactionDispatch={transactionDispatch} />);
+      transactionDispatch={transactionDispatch} 
+      />);
   }
   
   return (

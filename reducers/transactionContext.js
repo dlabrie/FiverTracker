@@ -10,8 +10,6 @@ const initialState = {
   history: [],
   transactionCount: 0,
   peers: [],
-  loadingMode: "",
-  loadingDate: "",
   loadingComplete: true,
   loadingState: null,
 };

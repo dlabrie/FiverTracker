@@ -25,7 +25,6 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.containerSettings}>
-        <Text>{JSON.stringify(authState)}</Text>
         <TouchableOpacity style={styles.btn} onPress={resetTransactions}>
             <Text lightColor="#fff">Empty Transaction Cache</Text>
         </TouchableOpacity>

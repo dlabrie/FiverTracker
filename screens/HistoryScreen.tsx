@@ -16,7 +16,7 @@ export default function OwesScreen() {
   const { authState, authDispatch } = useContext(authContext);
   const { transactionState, transactionDispatch } = useContext(transactionContext);
 
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("a");
 
   const [badges, setBadges] = useState([]);
 
@@ -26,14 +26,18 @@ export default function OwesScreen() {
   }
 
   const setHistoryFilter = (shaketag) => {
-    setFilter(shaketag);
-    if(shaketag != "")
-      transactionDatabaseHandler.getUserTransactions(shaketag, transactionDispatch);
-    else
-      transactionDatabaseHandler.getHistory(transactionDispatch);
+    if(filter != shaketag) {
+      setFilter(shaketag);
+      if(shaketag != "")
+        transactionDatabaseHandler.getUserTransactions(shaketag, transactionDispatch);
+      else
+        transactionDatabaseHandler.getHistory(transactionDispatch);
+    }
   }
 
-  useEffect(() => {setHistoryFilter("")});
+  useEffect(()=>{
+    setHistoryFilter("");
+  });
   
   return (
     <View style={styles.container}>

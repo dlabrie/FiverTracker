@@ -26,8 +26,6 @@ const transactionReducer = (transactionState, action) => {
     case 'loadingStatus':      
       return {
         ...transactionState,
-        loadingMode: action.loadingMode,
-        loadingDate: action.loadingDate,
         loadingComplete: action.loadingComplete,
         loadingState: action.loadingState,
       }; 
