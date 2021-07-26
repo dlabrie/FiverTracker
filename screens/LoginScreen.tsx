@@ -27,7 +27,7 @@ export default function LoginScreen() {
   const processLoginForm = async (email: string, password: string) => {
     if(email == "") 
       return false;
-    if(password.length<8) 
+    if(password.length<4) 
       return false;
 
     setLoading(true);
@@ -39,10 +39,14 @@ export default function LoginScreen() {
       alert(resp["message"]);
     } else {
       if(!resp.accessToken) {
-        alert("An error occured while submitting your login request to Shakepay")
+        alert("An error occured while submitting your login request to Shakepay"+JSON.stringify(resp));
       } else {
 
-        var jwt = jwt_decode(resp.accessToken);
+        jwt = {mfa: true};
+        if(resp.accessToken != "demo") {
+          var jwt = jwt_decode(resp.accessToken);
+        }
+
         if(jwt["mfa"]) {
           setTempAuthToken(resp.accessToken);
           setLoginStep1(false);
@@ -88,7 +92,7 @@ export default function LoginScreen() {
     <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss();}}>
       <View style={styles.container}>
           <View style={styles.titleView}>
-            <Image style={styles.pepeMoney} source={require('../assets/images/pepe-money.png')} resizeMode="contain" />
+            <Image style={styles.money} source={require('../assets/images/money.png')} resizeMode="contain" />
             <Text style={styles.loginTitle}>Shakepay FiverTracker</Text>
           </View>
 
@@ -165,7 +169,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: "center",
   },
-  pepeMoney: {
+  money: {
     width: "100%",
     height: 80,
     marginBottom: 10,

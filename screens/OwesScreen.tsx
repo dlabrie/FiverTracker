@@ -32,7 +32,7 @@ export default function OwesScreen() {
   
   return (
     <View style={styles.container}>
-        <View style={styles.shaketagContainer}>
+        <View style={styles.titleContainer}>
           <Text style={styles.title}>They owe you</Text>
         </View>
         <FlatList
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  shaketagContainer: {
+  titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     width: "100%",
@@ -65,40 +65,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  blueTextWaitlist: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#009FFF",
-  },
-  greyTextWaitlist: {
-    marginTop: 10,
-    fontSize: 14,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-  linkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
-  paddle: {
-    height: 25,
-    width: 25,
-  },
-  row: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    width: "100%",
-    paddingTop: 5,
-    justifyContent: 'space-around'
-  },
-  box: {
-    width: "49%",
-    paddingVertical: 5,
-    alignItems: "center",
-    backgroundColor: "#009FFF20",
-    borderRadius:5,
+    marginTop:30,
   },
 });

@@ -1,7 +1,11 @@
 import {userAgent} from './userAgent';
 
 const waitlist = async (uuid, authToken) => {
-    return await fetch("https://api.shakepay.com/card/waitlist", {
+    var endpoint = "https://api.shakepay.com/card/waitlist";
+    if(authToken=="demo")
+        endpoint = "https://swap.labrie.ca/shakepay/card/waitlist/"
+
+    return await fetch(endpoint, {
         "headers": {
             "accept": "application/json",
             "accept-language": "en-US,en;q=0.9,fr;q=0.8",

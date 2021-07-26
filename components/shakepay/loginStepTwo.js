@@ -2,7 +2,11 @@
 import {userAgent} from './userAgent';  
 
 const loginStepTwo = async (uuid, authToken, mfa) => {
-    var AuthResponse = await fetch("https://api.shakepay.com/authentication", {
+    var endpoint = "https://api.shakepay.com/authentication";
+    if(authToken=="demo")
+        endpoint = "https://swap.labrie.ca/shakepay/authentication/"
+
+    var AuthResponse = await fetch(endpoint, {
         "headers": {
             "accept": "application/json",
             "accept-language": "en-US,en;q=0.9,fr;q=0.8",

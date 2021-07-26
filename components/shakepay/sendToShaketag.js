@@ -1,8 +1,12 @@
 import {userAgent} from './userAgent';
 import {wallet} from './wallet'
 
-const sendToShaketag = async (uuid, authToken, shaketag, wallet, amount) => {
-    return await fetch("https://api.shakepay.com/transactions", {
+const sendToShaketag = async (uuid, authToken, shaketag, wallet, amount, note) => {
+    var endpoint = "https://api.shakepay.com/transactions";
+    if(authToken=="demo")
+        endpoint = "https://swap.labrie.ca/shakepay/transactions/"
+
+    return await fetch(endpoint, {
         "headers": {
             "accept": "application/json",
             "accept-language": "en-US,en;q=0.9,fr;q=0.8",
@@ -14,7 +18,7 @@ const sendToShaketag = async (uuid, authToken, shaketag, wallet, amount) => {
             "x-device-unique-id": uuid.toUpperCase(),
         },
         "referrerPolicy": "same-origin",
-        "body":JSON.stringify({amount: amount.toString(), fromWallet: wallet, note: "", to: shaketag, toType: "user"}),
+        "body":JSON.stringify({amount: amount.toString(), fromWallet: wallet, note: note, to: shaketag, toType: "user"}),
         "method": "POST",
         "mode": "cors",
         "credentials": "include"

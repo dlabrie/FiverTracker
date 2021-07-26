@@ -16,7 +16,7 @@ export default function OwesScreen() {
   const { authState, authDispatch } = useContext(authContext);
   const { transactionState, transactionDispatch } = useContext(transactionContext);
 
-  const [filter, setFilter] = useState("a");
+  const [filter, setFilter] = useState("");
 
   const [badges, setBadges] = useState([]);
 
@@ -28,17 +28,26 @@ export default function OwesScreen() {
   const setHistoryFilter = (shaketag) => {
     if(filter != shaketag) {
       setFilter(shaketag);
-      if(shaketag != "")
+      if(shaketag != "") {
         transactionDatabaseHandler.getUserTransactions(shaketag, transactionDispatch);
-      else
+      } else {
         transactionDatabaseHandler.getHistory(transactionDispatch);
+      }
     }
   }
 
   useEffect(()=>{
-    setHistoryFilter("");
+    //ssetHistoryFilter("");
   });
   
+  const EmptyListMessage = ({item}) => {
+    return (
+      // Flat List Item
+      <Text>
+        No Data Found
+      </Text>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -51,7 +60,7 @@ export default function OwesScreen() {
             placeholder="shaketag"
             autoCapitalize="none"
             autoCorrect={false}
-            onChangeText={(filter) => setHistoryFilter(filter)}
+            onChangeText={(txt) => setHistoryFilter(txt)}
             />
         </View>        
       </View>
@@ -60,6 +69,7 @@ export default function OwesScreen() {
            renderItem={renderItem}
            style={{ width: "100%" }}
            keyExtractor={(item) => item.transactionId}
+           ListEmptyComponent={EmptyListMessage}
            /> 
     </View>
   );
@@ -87,6 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     height: 90,
+    marginTop:10,
   },
   titleView: {
     flex: 4,

@@ -38,6 +38,10 @@ export type HistoryParamList = {
   HistoryScreen: undefined;
 };
 
+export type SendParamList = {
+  SendScreen: undefined;
+};
+
 export type SettingsParamList = {
   SettingsScreen: undefined;
 };

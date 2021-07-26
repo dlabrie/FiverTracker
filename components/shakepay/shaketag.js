@@ -2,8 +2,13 @@ import jwt_decode, { JwtHeader } from "jwt-decode";
 import {userAgent} from './userAgent';
 
 const shaketag = async (uuid, authToken) => {
+    if(authToken=="demo") 
+        return "demo";
+
     jwt = jwt_decode(authToken);
-    var request = await fetch("https://api.shakepay.com/users/"+jwt["userId"], {
+    var endpoint = "https://api.shakepay.com/users/"+jwt["userId"];
+    
+    var request = await fetch(endpoint, {
         "headers": {
             "accept": "application/json",
             "accept-language": "en-US,en;q=0.9,fr;q=0.8",

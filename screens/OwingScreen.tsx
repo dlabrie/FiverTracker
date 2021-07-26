@@ -32,8 +32,9 @@ export default function OwingScreen() {
   
   return (
     <View style={styles.container}>
-        <View style={styles.shaketagContainer}>
+        <View style={styles.titleContainer}>
           <Text style={styles.title}>You owe them</Text>
+          <Text style={styles.helptext}>Press on a card to send back your dues.</Text>
         </View>
         <FlatList
            data={transactionState.owing}
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  shaketagContainer: {
+  titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     width: "100%",
@@ -65,40 +66,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop:30,
   },
-  blueTextWaitlist: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#009FFF",
-  },
-  greyTextWaitlist: {
-    marginTop: 10,
-    fontSize: 14,
-  },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
-  },
-  linkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
-  paddle: {
-    height: 25,
-    width: 25,
-  },
-  row: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    width: "100%",
-    paddingTop: 5,
-    justifyContent: 'space-around'
-  },
-  box: {
-    width: "49%",
-    paddingVertical: 5,
-    alignItems: "center",
-    backgroundColor: "#009FFF20",
-    borderRadius:5,
+  helptext: {
+    fontSize: 12,
   },
 });

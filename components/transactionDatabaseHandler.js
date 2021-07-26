@@ -96,7 +96,6 @@ export const getTransactions = async (uuid, authToken, data, transactionDispatch
         }
 
         transactionCount += transactionsJson.length;
-
         if(transactionsJson.length < 2000) {
             pullMore = false;
         }
@@ -240,19 +239,27 @@ export const processBalances = async (transactionDispatch) => {
 }
 
 export const processBalancesCallback = async (data, transactionDispatch) => {
-    var swapperBalance = {}
-    var swapperTransactions = {}
+    var swapperBalance = {};
+    var swapperTransactions = {};
+
+    var todaysSwappers = {};
+
+    var localTime = new Date();
+    var localTimeOffset = localTime.getTimezoneOffset();
+    var msOffset = (localTimeOffset - 240) * 60 * 1000;
+    var easternTime = new Date(localTime.getTime() + msOffset);
+    var midnightStart = new Date(easternTime.getFullYear(), easternTime.getMonth(), easternTime.getDate(), 0, 0, 0, 0);
+    var startTime = new Date(midnightStart.getTime() - msOffset);
 
     for(let ipbc in data) {
         var t = data[ipbc];
         var swapper_id = t.peer;
 
+        if (parseInt(Date.parse(t.createdAt)) > startTime.getTime()) {
+            todaysSwappers[swapper_id] = 1;
+        }
         if (typeof swapperBalance[swapper_id] === 'undefined') {
-            //if (typeof swapperBalanceInit[swapper_usr] === 'undefined') {
-                swapperBalance[swapper_id] = 0;
-            //} else {
-            //    swapperBalance[swapper_id] = swapperBalanceInit[swapper_usr];
-            //}
+            swapperBalance[swapper_id] = 0;
         }
         if (typeof swapperTransactions[swapper_id] === 'undefined') {
             swapperTransactions[swapper_id] = [];
@@ -274,6 +281,7 @@ export const processBalancesCallback = async (data, transactionDispatch) => {
         }
     }
 
+    transactionDispatch({type: "todaysSwappers", todaysSwappers: todaysSwappers});
     transactionDispatch({type: "dues", owes: owes, owing: owing});
 }
 
@@ -289,7 +297,7 @@ export const getUserTransactionsCallback = async(data, transactionDispatch) => {
     if(data.length>0) {
         db.transaction(tx => {
             tx.executeSql('SELECT * FROM transactions WHERE peer = ?', [data[0].peerId], 
-                (txObj, { rows: { _array } }) => getUserTransactionsCallbackData(_array, transactionDispatch)
+                (txObj, { rows: { _array } }) => transactionDispatch({type: 'userTransactions', history: _array})
             );
         });
     } else {
@@ -297,23 +305,12 @@ export const getUserTransactionsCallback = async(data, transactionDispatch) => {
     }
 }
 
-export const getUserTransactionsCallbackData = async(data, transactionDispatch) => {
-    if(data.length>0) {
-        transactionDispatch({type: 'userTransactions', history: data});
-    }
-}
-
-
 export const getHistory = async (transactionDispatch) => {
     db.transaction(tx => {
         tx.executeSql('SELECT * FROM transactions ORDER BY createdAt DESC LIMIT 1000', null, 
-            (txObj, { rows: { _array } }) => getHistoryCallback(_array, transactionDispatch)
+            (txObj, { rows: { _array } }) => {
+                transactionDispatch({type: 'userTransactions', history: _array})
+            }
         )
     });
-}
-
-export const getHistoryCallback = async(data, transactionDispatch) => {
-    if(data.length>0) {
-        transactionDispatch({type: 'userTransactions', history: data});
-    }
 }

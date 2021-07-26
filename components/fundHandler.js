@@ -1,7 +1,7 @@
 import wallet from "./shakepay/wallet"
 import sendToShaketag from "./shakepay/sendToShaketag"
 
-export const sendFunds = async (uuid, authToken, shaketag, amount) => {
+export const sendFunds = async (uuid, authToken, shaketag, amount, note) => {
     var walletResponse = await wallet(uuid, authToken);
     var w = await walletResponse.json();
     if(walletResponse.status != 200) {
@@ -16,12 +16,11 @@ export const sendFunds = async (uuid, authToken, shaketag, amount) => {
         }
     }
 
-    var fundResponse = await sendToShaketag(uuid, authToken, shaketag, walletId, amount);
+    var fundResponse = await sendToShaketag(uuid, authToken, shaketag, walletId, amount, note);
     var fr = await fundResponse.json();
 
     if(fundResponse.status != 201) {
-        alert("An error happened when sending $"+amount+" to "+shaketag+". Please try again "+fundResponse.status);
-        alert(JSON.stringify(fr));
+        alert("An error happened when sending $"+amount+" to "+shaketag+". Please try again. DEBUG: "+fundResponse.status+" "+JSON.stringify(fr));
         return false;
     }
 

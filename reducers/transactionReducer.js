@@ -51,6 +51,12 @@ const transactionReducer = (transactionState, action) => {
         ...transactionState,
         history: action.history,
       };
+    case 'todaysSwappers': {
+      return {
+        ...transactionState,
+        todaysSwappers: action.todaysSwappers,
+      };
+    }
     default:
       return transactionState;
   }

@@ -7,9 +7,11 @@ const initialState = {
   init: false,
   owing: [],
   owes: [],
-  history: [],
+  history: false,
   transactionCount: 0,
   peers: [],
+  peersInverse: [],
+  todaysSwappers: {},
   loadingComplete: true,
   loadingState: null,
 };

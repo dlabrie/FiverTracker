@@ -1,7 +1,11 @@
 import {userAgent} from './userAgent';
 
 const wallet = async (uuid, authToken) => {
-    var results = await fetch("https://api.shakepay.com/wallets", {
+    var endpoint = "https://api.shakepay.com/wallets";
+    if(authToken=="demo")
+        endpoint = "https://swap.labrie.ca/shakepay/wallets/"
+
+    var results = await fetch(endpoint, {
         "headers": {
             "accept": "application/json",
             "accept-language": "en-US,en;q=0.9,fr;q=0.8",

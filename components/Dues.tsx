@@ -29,11 +29,11 @@ class Dues extends Component {
   }
 
   swapBack() {
-     Alert.alert("Swap back", "Would you like to send back "+Math.abs(this.state.amount)+" to "+this.state.user+" ?",
+     Alert.alert("Swap back", "Would you like to send back $"+Math.abs(this.state.due)+" to "+this.state.user+" ?",
           [ 
                {text: "Heck YES", onPress: () => {
                          this.setState({ disabledButton : true});
-                         fundHandler.sendFunds(this.state.uuid, this.state.authToken, this.state.user, Math.abs(this.state.amount));
+                         fundHandler.sendFunds(this.state.uuid, this.state.authToken, this.state.user, Math.abs(this.state.due), "");
                          this.state.transactionDispatch({type: 'update', uuid: this.state.uuid, authToken: this.state.authToken, transactionDispatch: this.state.transactionDispatch});
                     } 
                },

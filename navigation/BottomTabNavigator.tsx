@@ -11,12 +11,13 @@ import * as React from 'react';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 
-import { BottomTabParamList, WelcomeParamList, SettingsParamList } from '../types';
+import { BottomTabParamList, WelcomeParamList, OwingParamList, OwesParamList, HistoryParamList, SendParamList, SettingsParamList  } from '../types';
 
 import WelcomeScreen from '../screens/WelcomeScreen';
 import OwingScreen from '../screens/OwingScreen';
 import OwesScreen from '../screens/OwesScreen';
 import HistoryScreen from '../screens/HistoryScreen';
+import SendScreen from '../screens/SendScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -35,7 +36,6 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
-
       <BottomTab.Screen
         name="Owing"
         component={OwingNavigator}
@@ -43,7 +43,6 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="arrow-up-circle" color={color} />,
         }}
       />
-
       <BottomTab.Screen
         name="Owes"
         component={OwesNavigator}
@@ -51,7 +50,6 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="arrow-down-circle" color={color} />,
         }}
       />
-
       <BottomTab.Screen
         name="History"
         component={HistoryNavigator}
@@ -59,7 +57,13 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
-
+      <BottomTab.Screen
+        name="Send"
+        component={SendNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="arrow-up" color={color} />,
+        }}
+      />
       <BottomTab.Screen
         name="Settings"
         component={SettingsNavigator}
@@ -88,7 +92,7 @@ function WelcomeNavigator() {
       <WelcomeStack.Screen
         name="WelcomeScreen"
         component={WelcomeScreen}
-        options={{ headerTitle: 'Welcome' }}
+        options={{ headerTitle: 'Welcome', headerShown: false }}
       />
     </WelcomeStack.Navigator>
   );
@@ -102,6 +106,7 @@ function OwingNavigator() {
       <OwingStack.Screen
         name="OwingScreen"
         component={OwingScreen}
+        options={{ headerTitle: 'Owing', headerShown: false }}
       />
     </OwingStack.Navigator>
   );
@@ -115,6 +120,7 @@ function OwesNavigator() {
       <OwesStack.Screen
         name="OwesScreen"
         component={OwesScreen}
+        options={{ headerTitle: 'Owes', headerShown: false }}
       />
     </OwesStack.Navigator>
   );
@@ -128,8 +134,23 @@ function HistoryNavigator() {
       <HistoryStack.Screen
         name="HistoryScreen"
         component={HistoryScreen}
+        options={{ headerTitle: 'History', headerShown: false }}
       />
     </HistoryStack.Navigator>
+  );
+}
+
+const SendStack = createStackNavigator<SendParamList>();
+
+function SendNavigator() {
+  return (
+    <SendStack.Navigator>
+      <SendStack.Screen
+        name="SendScreen"
+        component={SendScreen}
+        options={{ headerTitle: 'Send', headerShown: false }}
+      />
+    </SendStack.Navigator>
   );
 }
 
@@ -141,6 +162,7 @@ function SettingsNavigator() {
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
+        options={{ headerTitle: 'Settings', headerShown: false }}
       />
     </SettingsStack.Navigator>
   );

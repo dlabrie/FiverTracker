@@ -8,13 +8,11 @@ import { Text, View } from '../components/Themed';
 
 import isAuthenticated from '../components/isAuthenticated'
 
-
 import shaketag from '../components/shakepay/shaketag'
 import waitlist from '../components/shakepay/waitlist'
 import wallet from '../components/shakepay/wallet'
 
 import * as transactionDatabaseHandler from '../components/transactionDatabaseHandler'
-
 
 export default function WelcomeScreen() {
 
@@ -53,6 +51,7 @@ export default function WelcomeScreen() {
     var w = await waitlistResponse.json();
     if(waitlistResponse.status == 401) {
       if(!isAuthenticated(w)) {
+        alert("we're not auth for waitlist");
           authDispatch({ type: 'unsetAuthToken' });
           return false;
       } 
@@ -99,6 +98,8 @@ export default function WelcomeScreen() {
       setUniqueSwappersPaddle(uniqueSwappersPaddleCount);
     if(uniqueSwappers != uniqueSwappersCount)
       setUniqueSwappers(uniqueSwappersCount);
+
+    pullWallets();
   }
 
   const refreshTransactions =  () => {
@@ -121,7 +122,7 @@ export default function WelcomeScreen() {
     pullWaitlist();
     pullShaketag();
     refreshTransactions();
-    pullWallets();
+    setInterval(() => {pullWallets()}, 30000);
   }, []);
 
   

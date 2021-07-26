@@ -1,12 +1,12 @@
 import React, {useContext} from 'react';
-import { Alert, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 
 import { authContext } from '../reducers/authContext';
 import { transactionContext } from '../reducers/transactionContext';
 
-import * as SecureStore from 'expo-secure-store';
+import Constants from 'expo-constants';
 
 export default function App() {
       
@@ -25,12 +25,13 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.containerSettings}>
+        <Text style={styles.text}>Version: {Constants.nativeAppVersion}</Text>
         <TouchableOpacity style={styles.btn} onPress={resetTransactions}>
             <Text lightColor="#fff">Empty Transaction Cache</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.btn} onPress={Logout}>
-            <Text lightColor="#fff">LOGOUT</Text>
+            <Text lightColor="#fff">Logout</Text>
         </TouchableOpacity>
 
       </View>
@@ -60,7 +61,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    marginTop: 5,
     backgroundColor: "#009FFF",
     marginTop: 20,
   },

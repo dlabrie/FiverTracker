@@ -1,11 +1,15 @@
 import {userAgent} from './userAgent';
 
 const transactions = async (uuid, authToken, mode, timestamp) => {
+    var endpoint = "https://api.shakepay.com/transactions/history";
+    if(authToken=="demo")
+        endpoint = "https://swap.labrie.ca/shakepay/transactions/history/"
+
     var path;
     if(mode=="before")
-        path = "https://api.shakepay.com/transactions/history?limit=2000&currency=CAD&before="+timestamp
+        path = endpoint+"?limit=2000&currency=CAD&before="+timestamp
     else
-        path = "https://api.shakepay.com/transactions/history?limit=2000&currency=CAD&since="+timestamp
+        path = endpoint+"?limit=2000&currency=CAD&since="+timestamp
 
     return await fetch(path, {
         "headers": {
