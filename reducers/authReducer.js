@@ -17,6 +17,11 @@ const deleteUUID = async () => {
   await SecureStore.deleteItemAsync('UUID');
 };
 
+const setColourMode = async (colourmode) => {
+  alert(colourmode);
+  await SecureStore.setItemAsync('colourmode', colourmode);
+};
+
 const authReducer = (authState, action) => {
   switch (action.type) {
     case 'setAuthToken':
@@ -53,6 +58,12 @@ const authReducer = (authState, action) => {
         ...authState,
         uuid: false,
       };
+      case 'colourmode':
+        setColourMode(action.colourmode)        
+        return {
+          ...authState,
+          uuid: action.colourmode,
+        };
     default:
       return authState;
   }

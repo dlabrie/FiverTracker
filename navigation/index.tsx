@@ -11,12 +11,23 @@ import RootStackScreen from './RootStackScreen';
 import { AuthStore } from '../reducers/authContext';
 import { TransactionStore } from '../reducers/transactionContext';
 
+import * as SecureStore from 'expo-secure-store';
+
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+  const getColourMode = async () => {
+    const colourmode = await SecureStore.getItemAsync('colourmode');
+    if (!colourmode) {
+      authDispatch({ type: 'colourmode', colourmode: "dark" });
+      return 'dark';
+    } 
+    return colourmode === 'dark' ? "dark" : "light";
+  };
+
   return (
     <AuthStore>
       <TransactionStore>
         <NavigationContainer
-          theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          theme={DarkTheme}>
           <RootStackScreen />
         </NavigationContainer>
       </TransactionStore>

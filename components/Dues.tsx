@@ -5,6 +5,8 @@ import { Text, View,  } from '../components/Themed';
 
 import * as fundHandler from "./fundHandler";
 
+import * as SecureStore from 'expo-secure-store';
+
 class Dues extends Component {
 
   constructor(props: any) {
@@ -31,9 +33,10 @@ class Dues extends Component {
   swapBack() {
      Alert.alert("Swap back", "Would you like to send back $"+Math.abs(this.state.due)+" to "+this.state.user+" ?",
           [ 
-               {text: "Heck YES", onPress: () => {
+               {text: "Heck YES", onPress: async () => {
                          this.setState({ disabledButton : true});
-                         fundHandler.sendFunds(this.state.uuid, this.state.authToken, this.state.user, Math.abs(this.state.due), "");
+                         const note = await SecureStore.getItemAsync('fromNote');
+                         fundHandler.sendFunds(this.state.uuid, this.state.authToken, this.state.user, Math.abs(this.state.due), note);
                          this.state.transactionDispatch({type: 'update', uuid: this.state.uuid, authToken: this.state.authToken, transactionDispatch: this.state.transactionDispatch});
                     } 
                },
@@ -53,7 +56,7 @@ class Dues extends Component {
                </View>
                <View style={styles.lastTransaction}>
                     <View style={styles.lastTransactionContainer}>
-                         <Text style={styles.user}>@{ this.state.user }</Text>
+                         <Text style={styles.user}>@{ this.state.user }{this.state.swapBackNote}</Text>
                          <Text style={styles.direction}>Last { this.state.amount < 0 ? ( "Sent" ) : ( "Received") } ${Math.abs(this.state.amount.toFixed(2).toString())}</Text>
                          {  this.showNote() }
                          <Text style={styles.date} darkColor="#bbb" lightColor="#666">{this.state.createdAt}</Text>
@@ -61,7 +64,7 @@ class Dues extends Component {
                 </View>
             </View>
           </TouchableOpacity>
-        )
+     );
    }
 }
 
@@ -75,7 +78,7 @@ const styles = StyleSheet.create ({
           paddingTop: 5,
           justifyContent:"flex-end",
           borderRadius: 5,
-          marginBottom: 10,
+          marginBottom: 5,
      },
 
      amountFlex: {
@@ -109,7 +112,6 @@ const styles = StyleSheet.create ({
           fontSize:12,
      },
      lastTransactionContainer: {
-          paddingHorizontal:3,
           backgroundColor: "#009FFF1A",
           padding:5,
           borderBottomEndRadius:10,

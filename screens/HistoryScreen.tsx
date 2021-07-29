@@ -1,5 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
+
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 import { authContext } from '../reducers/authContext';
 import { transactionContext } from '../reducers/transactionContext';
@@ -8,10 +10,9 @@ import { Text, View, TextInput } from '../components/Themed';
 
 import Transaction from '../components/Transaction';
 
-
 import * as transactionDatabaseHandler from '../components/transactionDatabaseHandler'
 
-export default function OwesScreen() {
+export default function OwesScreen({navigation}) {
 
   const { authState, authDispatch } = useContext(authContext);
   const { transactionState, transactionDispatch } = useContext(transactionContext);
@@ -25,8 +26,8 @@ export default function OwesScreen() {
     return (<Transaction user={user} due={item.amount} amount={item.amount} createdAt={item.createdAt} note={item.note} />);
   }
 
-  const setHistoryFilter = (shaketag) => {
-    if(filter != shaketag) {
+  const setHistoryFilter = (shaketag, force=false) => {
+    if(filter != shaketag || force) {
       setFilter(shaketag);
       if(shaketag != "") {
         transactionDatabaseHandler.getUserTransactions(shaketag, transactionDispatch);
@@ -36,15 +37,29 @@ export default function OwesScreen() {
     }
   }
 
+  const refreshTransactions = async () => {
+    transactionDispatch({type: 'update', uuid: authState.uuid, authToken: authState.authToken, transactionDispatch: transactionDispatch});
+    while(transactionState.loadingComplete==false) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setHistoryFilter(filter, true);
+  };
+
   useEffect(()=>{
-    //ssetHistoryFilter("");
-  });
+    setHistoryFilter(filter);
+
+    const refresh = navigation.addListener('focus', () => {
+      setHistoryFilter(filter, true);
+    });
+    return refresh;
+  }, [navigation]);
   
   const EmptyListMessage = ({item}) => {
     return (
       // Flat List Item
-      <Text>
-        No Data Found
+      <Text style={{marginTop:20}}>
+        No transactions for current filter.
       </Text>
     );
   }
@@ -62,7 +77,13 @@ export default function OwesScreen() {
             autoCorrect={false}
             onChangeText={(txt) => setHistoryFilter(txt)}
             />
+        </View>  
+        <View style={styles.refreshView}>
+          <TouchableOpacity onPress={() => {refreshTransactions()}}>
+            <Ionicons name="refresh-sharp" size={30} color="#009fff" />
+          </TouchableOpacity>
         </View>        
+      
       </View>
       <FlatList
            data={transactionState.history}
@@ -83,12 +104,7 @@ const styles = StyleSheet.create({
     flexBasis: 10,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  container90: {
-    flex: 1,
-    width: "95%",
-    padding: 10,
-    flexBasis: 10,
+    marginTop:30,
   },
   header: {
     alignItems: 'center',
@@ -96,11 +112,13 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignContent: "center",
-    height: 90,
-    marginTop:10,
+    marginTop:5,
   },
   titleView: {
     flex: 4,
+  },
+  refreshView: {
+    paddingLeft:5,
   },
   title: {
     fontSize: 20,

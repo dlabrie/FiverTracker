@@ -2,7 +2,7 @@
   "expo": {
     "name": "FiverTracker",
     "slug": "FiverTracker",
-    "version": "0.4.69",
+    "version": "0.6.420",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -19,16 +19,15 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "0.4.69",
+      "buildNumber": "0.6.420",
       "supportsTablet": true,
       "bundleIdentifier": "ca.labrie.swap",
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app uses biometric authentication."
-      },
-      "userInterfaceStyle": "automatic"
+      }
     },
     "android": {
-      "versionCode":4,
+      "versionCode":6,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#111111"

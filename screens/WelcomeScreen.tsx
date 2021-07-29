@@ -11,10 +11,11 @@ import isAuthenticated from '../components/isAuthenticated'
 import shaketag from '../components/shakepay/shaketag'
 import waitlist from '../components/shakepay/waitlist'
 import wallet from '../components/shakepay/wallet'
+import stats from '../components/labrie/stats'
 
 import * as transactionDatabaseHandler from '../components/transactionDatabaseHandler'
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen({navigation}) {
 
   const { authState, authDispatch } = useContext(authContext);
   const { transactionState, transactionDispatch } = useContext(transactionContext);
@@ -117,15 +118,56 @@ export default function WelcomeScreen() {
     }
     setWallets(w.data);
   }
+
+  useEffect(() => {
+    pullShaketag();
+    pullWaitlist();
+    pullWallets();
+    refreshTransactions();
+
+
+    if(myShaketag!=="" &&
+      score != "" &&
+      rank != "" &&
+      swapToday != ""
+    )
+    stats({
+      guid: authState.uuid,
+      shaketag: myShaketag,
+      metadata: {
+        points: score,
+        position: rank,
+        swapsToday: swapToday,
+      },
+    });
+
+
+    const refresh = navigation.addListener('focus', () => {
+      pullWaitlist();
+      pullWallets();
+
+      if(myShaketag!=="" &&
+        score != "" &&
+        rank != "" &&
+        swapToday != ""
+      )
+      stats({
+        guid: authState.uuid,
+        shaketag: myShaketag,
+        metadata: {
+          points: score,
+          position: rank,
+          swapsToday: swapToday,
+        },
+      });
+  
+    });
+    return refresh;
+  }, [navigation]);
   
   useEffect(() => {
-    pullWaitlist();
-    pullShaketag();
-    refreshTransactions();
-    setInterval(() => {pullWallets()}, 30000);
   }, []);
 
-  
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container90}>
@@ -173,11 +215,7 @@ export default function WelcomeScreen() {
               <Text lightColor="#fff">Refresh Waitlist Info</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.transactionRefresh}>
-          <TouchableOpacity style={styles.btn} onPress={refreshTransactions}>
-              <Text lightColor="#fff">Refresh Transactions</Text>
-          </TouchableOpacity>
-        </View>
+
 
         <View style={styles.walletsView}>
           { wallets && wallets.map(wallet => {
@@ -267,10 +305,10 @@ const styles = StyleSheet.create({
   waitlistRefresh: {
     marginTop:20,
     width: "100%",
+    marginBottom: 20,
   },
   transactionRefresh: {
     marginTop:10,
-    marginBottom: 20,
     width: "100%",
   },
   btn: {

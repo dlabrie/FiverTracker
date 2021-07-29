@@ -54,7 +54,7 @@ export default function AuthenticationStackScreen() {
       }
 
       // Checking if device has biometrics records
-      const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+      /*const isEnrolled = await LocalAuthentication.isEnrolledAsync();
       
       if (!isEnrolled) {
         Alert.alert('Error','This application relies on biometric data, please configure your device.')
@@ -62,12 +62,18 @@ export default function AuthenticationStackScreen() {
           setAuthenticated(false);
         return false;
       }
-
+      */
       // Authenticate user
-      await LocalAuthentication.authenticateAsync();
+      var authResult = await LocalAuthentication.authenticateAsync();
+      if(authResult.success!=true) {
 
+        if(authenticated)
+          setAuthenticated(false);
+        return false;
+      }
+      
       if(!authenticated)
-        setAuthenticated(true);
+          setAuthenticated(true);
       return true;
     } catch (error) {
       Alert.alert('An error as occured', error?.message);
@@ -91,10 +97,10 @@ export default function AuthenticationStackScreen() {
             headerTitle: () => null,
             }}
         >
-          {!authenticated && !authState.authToken ? (
-            <AuthenticationNavigationStack.Screen name="Login" component={LoginScreen} />
-            ) : (
+          {authenticated && authState.authToken ? (
             <AuthenticationNavigationStack.Screen name="Root" component={BottomTabNavigator} />
+            ) : (
+            <AuthenticationNavigationStack.Screen name="Login" component={LoginScreen} />
           )}
         </AuthenticationNavigationStack.Navigator>
       </transactionContext.Provider>

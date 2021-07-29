@@ -53,7 +53,7 @@ const styles = StyleSheet.create ({
           paddingTop: 5,
           justifyContent:"flex-end",
           borderRadius: 5,
-          marginBottom: 10,
+          marginBottom: 5,
      },
 
      amountFlex: {
@@ -87,7 +87,6 @@ const styles = StyleSheet.create ({
           fontSize:12,
      },
      lastTransactionContainer: {
-          paddingHorizontal:3,
           backgroundColor: "#009FFF1A",
           padding:5,
           borderBottomEndRadius:10,

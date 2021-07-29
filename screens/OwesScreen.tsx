@@ -1,5 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
+
 import React, { useState, useContext } from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 import { authContext } from '../reducers/authContext';
 import { transactionContext } from '../reducers/transactionContext';
@@ -29,11 +31,22 @@ export default function OwesScreen() {
       transactionDispatch={transactionDispatch} 
       />);
   }
+
+  const refreshTransactions =  () => {
+    transactionDispatch({type: 'update', uuid: authState.uuid, authToken: authState.authToken, transactionDispatch: transactionDispatch});
+  };
   
   return (
     <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>They owe you</Text>
+        <View style={styles.headerView}>
+          <View style={styles.titleView}>
+            <Text style={styles.title}>They owe you</Text>
+          </View>
+          <View style={styles.refreshView}>
+            <TouchableOpacity onPress={() => {refreshTransactions()}}>
+              <Ionicons name="refresh-sharp" size={30} color="#009fff" />
+            </TouchableOpacity>
+          </View>
         </View>
         <FlatList
            data={transactionState.owes}
@@ -45,7 +58,6 @@ export default function OwesScreen() {
 
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -54,17 +66,27 @@ const styles = StyleSheet.create({
     flexBasis: 10,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 40,
   },
-  titleContainer: {
-    alignItems: 'center',
+  headerView: {
+    flexDirection: "row",
+  },
+  titleView: {
+    alignItems: 'flex-start',
     justifyContent: 'center',
     width: "100%",
+    flex: 85,
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop:30,
   },
+  helptext: {
+    fontSize: 12,
+  },
+  refreshView: {
+    flex: 15,
+    justifyContent: "center",
+    alignItems: "flex-end",
+  }
 });
