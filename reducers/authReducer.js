@@ -58,12 +58,17 @@ const authReducer = (authState, action) => {
         ...authState,
         uuid: false,
       };
-      case 'colourmode':
-        setColourMode(action.colourmode)        
-        return {
-          ...authState,
-          uuid: action.colourmode,
-        };
+    case 'colourmode':
+      setColourMode(action.colourmode)        
+      return {
+        ...authState,
+        uuid: action.colourmode,
+      };
+    case 'setRequireFaceId': 
+      return {
+        ...authState,
+        requireFaceId: action.requireFaceId,
+      };
     default:
       return authState;
   }

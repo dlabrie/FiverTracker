@@ -77,6 +77,7 @@ export default function LoginScreen() {
         alert("An error occured while submitting your MFA request to Shakepay")
       } else {
         authDispatch({ type: 'setAuthToken', authToken: resp.accessToken });
+        authDispatch({ type: 'setRequireFaceId', requireFaceId: true });
         setLoginStep2(false);
         setTempAuthToken("");
       }
@@ -86,6 +87,7 @@ export default function LoginScreen() {
 
   useEffect(() => {
     setLoading(false);
+    authDispatch({ type: 'setRequireFaceId', requireFaceId: false });
   }, []);
 
   return (

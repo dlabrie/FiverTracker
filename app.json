@@ -2,7 +2,7 @@
   "expo": {
     "name": "FiverTracker",
     "slug": "FiverTracker",
-    "version": "0.6.420",
+    "version": "0.7.69",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -19,7 +19,7 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "0.6.420",
+      "buildNumber": "0.7.69",
       "supportsTablet": true,
       "bundleIdentifier": "ca.labrie.swap",
       "infoPlist": {
@@ -27,7 +27,7 @@
       }
     },
     "android": {
-      "versionCode":6,
+      "versionCode":7,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#111111"

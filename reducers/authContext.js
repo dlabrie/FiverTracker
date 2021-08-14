@@ -6,6 +6,7 @@ import authReducer from './authReducer';
 const initialState = {
   authToken: false,
   uuid: false,
+  requireFaceId: true,
   colourmode: "dark",
 };
 

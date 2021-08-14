@@ -96,7 +96,7 @@ export default function App() {
         <TouchableOpacity style={styles.btn} onPress={Logout}>
             <Text lightColor="#fff">Logout</Text>
         </TouchableOpacity>
-        <Text style={styles.text}>Version: v0.6.420</Text>
+        <Text style={styles.text}>Version: v0.7.69</Text>
 
       </View>
     </View>

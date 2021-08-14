@@ -42,6 +42,9 @@ export default function AuthenticationStackScreen() {
 
 
   const checkFaceId = async () => {
+    if(authState.requireFaceId == false)
+      return true;
+
     try {
       // Checking if device is compatible
       const isCompatible = await LocalAuthentication.hasHardwareAsync();

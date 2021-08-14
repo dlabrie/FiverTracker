@@ -37,8 +37,10 @@ export default function WelcomeScreen({navigation}) {
 
   const pullShaketag = async () => {
     var s = await shaketag(authState.uuid, authState.authToken);
-    if(s!=myShaketag && s!="")
+    if(s!=myShaketag && s!="") 
         setMyShaketag("@"+s);
+
+    return s;
   };
 
   const pullWaitlist = async () => {
@@ -101,6 +103,20 @@ export default function WelcomeScreen({navigation}) {
       setUniqueSwappers(uniqueSwappersCount);
 
     pullWallets();
+
+    var userShaketag = await pullShaketag();
+    if(userShaketag!=="") {
+      stats({
+        guid: authState.uuid,
+        shaketag: userShaketag,
+        metadata: {
+          points: w.score,
+          position: w.rank,
+          swapsToday: counterToday,
+        },
+      });
+    }
+
   }
 
   const refreshTransactions =  () => {
@@ -125,41 +141,9 @@ export default function WelcomeScreen({navigation}) {
     pullWallets();
     refreshTransactions();
 
-
-    if(myShaketag!=="" &&
-      score != "" &&
-      rank != "" &&
-      swapToday != ""
-    )
-    stats({
-      guid: authState.uuid,
-      shaketag: myShaketag,
-      metadata: {
-        points: score,
-        position: rank,
-        swapsToday: swapToday,
-      },
-    });
-
-
-    const refresh = navigation.addListener('focus', () => {
+    const refresh = navigation.addListener('focus', async () => {
       pullWaitlist();
       pullWallets();
-
-      if(myShaketag!=="" &&
-        score != "" &&
-        rank != "" &&
-        swapToday != ""
-      )
-      stats({
-        guid: authState.uuid,
-        shaketag: myShaketag,
-        metadata: {
-          points: score,
-          position: rank,
-          swapsToday: swapToday,
-        },
-      });
   
     });
     return refresh;

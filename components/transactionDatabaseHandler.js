@@ -296,7 +296,7 @@ export const getUserTransactions = async (shaketag, transactionDispatch) => {
 export const getUserTransactionsCallback = async(data, transactionDispatch) => {
     if(data.length>0) {
         db.transaction(tx => {
-            tx.executeSql('SELECT * FROM transactions WHERE peer = ?', [data[0].peerId], 
+            tx.executeSql('SELECT * FROM transactions WHERE peer = ? ORDER BY createdAt DESC', [data[0].peerId], 
                 (txObj, { rows: { _array } }) => transactionDispatch({type: 'userTransactions', history: _array})
             );
         });
