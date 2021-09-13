@@ -48,6 +48,17 @@ export default function Send({navigation}) {
   }
   
   const Send = async (sendToShaketag: string) => {
+    if(typeof transactionState.peersInverse[sendToShaketag] !== 'undefined') {
+      for(let sid in transactionState.todaysSwappers) {
+        if(transactionState.peersInverse[sendToShaketag] == sid) {
+          Alert.alert("Uh oh", "It appears you've already swapped with "+sendToShaketag);
+          setToShaketag("");
+          return false;
+        }
+      }
+    }
+
+
     var response = await lookupLabrie(authState.uuid, sendToShaketag, "initiate");
     var resp = await response.json();
     if(response.status != 200) {
@@ -71,15 +82,6 @@ export default function Send({navigation}) {
       return false;
     }
 
-    if(typeof transactionState.peersInverse[sendToShaketag] !== 'undefined') {
-      for(let sid in transactionState.todaysSwappers) {
-        if(transactionState.peersInverse[sendToShaketag] == sid) {
-          Alert.alert("Uh oh", "It appears you've already swapped with "+sendToShaketag);
-          setToShaketag("");
-          return false;
-        }
-      }
-    }
     
     Alert.alert("Send a fiver", "Would you like to send $5 to "+sendToShaketag+"?",
     [ 

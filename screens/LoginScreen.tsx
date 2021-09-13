@@ -139,6 +139,7 @@ export default function LoginScreen() {
 
           <View style={styles.disclamerView}>
             <Text style={styles.disclamer} darkColor="#bbb" lightColor="#666">Your username and password are not stored in this application. This app was developed by @domi167 and is not affiliated with Shakepay.com</Text>
+            <Text style={styles.disclamer} darkColor="#bbb" lightColor="#666">v0.8.69</Text>
           </View>
           { loading && <LoadingIcon /> }
       </View>
